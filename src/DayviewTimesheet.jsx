@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import DayChecked from "./components/DayChecked";
 import Navbar from "./components/Navbar";
-
-const emptyCard = {
-  date: '',
-  timestart: '',
-  timeend: '',
-  description: '',
-}
 
 const DayviewTimesheet = () => {
 
   const [modal, setModal] = useState(false);
   let [customer, setCustomer] = useState();
   let [project, setProject] = useState();
-  let [role, setRole] = useState();
-  let [task, setTask] = useState();
   let [billtype, setBilltype] = useState();
-  const [card, setCard] = useState(emptyCard);
+  const [card, setCard] = useState({
+    roleDropdownValue: 'default',
+    taskDropdownValue: 'default',
+    date: '',
+    timestart: '',
+    timeend: '',
+    description: '',
+  });
   const [allCards, setAllCards] = useState([]);
   const [readMore, setReadmore] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -38,7 +36,7 @@ const DayviewTimesheet = () => {
       <div key={index} className="my-2">
         <section className='flex flex-col bg-yellow-100 mx-auto rounded-md h-auto w-[40rem]'>
           <div className="flex flex-row justify-between">
-            <h6 className='text-black text-lg font-bold mx-3 mt-1'>{role}</h6>
+            <h6 className='text-black text-lg font-bold mx-3 mt-1'>{theCard.roleDropdownValue}</h6>
             <div className="flex flex-row m-2">
               <img 
                 src="https://img.icons8.com/?size=512&id=59770&format=png" 
@@ -63,7 +61,7 @@ const DayviewTimesheet = () => {
             </div>
           </div>
             
-          <h6 className='text-black text-sm mx-3 mt-1'>{task}</h6>
+          <h6 className='text-black text-sm mx-3 mt-1'>{theCard.taskDropdownValue}</h6>
             <div className='flex flex-row'>
               <h6 className='text-black text-sm mx-3 mt-1'>{theCard.date}</h6>
               <h6 className='text-black text-sm mx-1 mt-1'>{theCard.timestart} - {theCard.timeend}</h6>
@@ -80,24 +78,35 @@ const DayviewTimesheet = () => {
       );
     });
 
-  function onCardValueChange(event) {
-    const { name, value } = event.target;
-    setCard((prevCard) => {
-      return {
-        ...prevCard,
-        [name]: value
-      };
-    });
-  }
+  useEffect(() => {
+    const storedData = localStorage.getItem("cardData");
+    if (storedData) {
+      setAllCards(JSON.parse(storedData));
+    }
+  }, []);
 
-  function onCardSubmit(event) {
+  const onCardValueChange = (event) => {
+    const { name, value } = event.target;
+    setCard((prevCard) => ({
+      ...prevCard,
+        [name]: value
+    }));
+  };
+
+  const onCardSubmit = (event) => {
     event.preventDefault();
-  
-    setAllCards((prevAllCard) => {
-      const newCard = { ...card };
-      newCard.id = Date.now().toString();
-      return [...prevAllCard, newCard];
-    });
+    const updateCardData = [...allCards, card];
+    localStorage.setItem("cardData", JSON.stringify(updateCardData));
+
+    setAllCards(updateCardData);
+    setCard({
+      roleDropdownValue: 'default',
+      taskDropdownValue: 'default',
+      date: '',
+      timestart: '',
+      timeend: '',
+      description: '',
+    })
     setModal(false);
   }
 
@@ -208,13 +217,14 @@ const DayviewTimesheet = () => {
                   <label htmlFor="role" className="ml-8 text-black">Role :</label>
                   <select
                     className="ml-[70px]"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
+                    name="roleDropdownValue"
+                    value={card.roleDropdownValue}
+                    onChange={onCardValueChange}
                   >
-                    <option className="text-center">--Select--</option>
-                    <option>Data scientist</option>
-                    <option>Quality assurance tester</option>
-                    <option>Software engineer</option>
+                    <option className="text-center" value="default">--Select--</option>
+                    <option value="Data scientist">Data scientist</option>
+                    <option value="Quality assurance tester">Quality assurance tester</option>
+                    <option value="Software engineer">Software engineer</option>
                   </select>
                 </div>
                 {/* Task box */}
@@ -222,13 +232,14 @@ const DayviewTimesheet = () => {
                   <label htmlFor="task" className="ml-8 text-black">Task :</label>
                   <select 
                     className="ml-[70px]"
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
+                    name="taskDropdownValue"
+                    value={card.taskDropdownValue}
+                    onChange={onCardValueChange}
                   >
-                    <option className="text-center">--Select--</option>
-                    <option>Assembling Data</option>
-                    <option>Analyzing Data</option>
-                    <option>Extracting Insights</option>
+                    <option className="text-center" value="default">--Select--</option>
+                    <option value="Assembling Data">Assembling Data</option>
+                    <option value="Analyzing Data">Analyzing Data</option>
+                    <option value="Extracting Insights">Extracting Insights</option>
                   </select>
                 </div>
                 {/* Bill type box */}
