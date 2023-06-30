@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import DayChecked from "./components/DayChecked";
-
 import Navbar from "./components/Navbar";
 
 const emptyCard = {
@@ -14,17 +13,25 @@ const emptyCard = {
 const DayviewTimesheet = () => {
 
   const [modal, setModal] = useState(false);
-  const [card, setCard] = useState(emptyCard);
-  const [allCards, setAllCards] = useState([]);
   let [customer, setCustomer] = useState();
   let [project, setProject] = useState();
-  let [billtype, setBilltype] = useState();
   let [role, setRole] = useState();
   let [task, setTask] = useState();
+  let [billtype, setBilltype] = useState();
+  const [card, setCard] = useState(emptyCard);
+  const [allCards, setAllCards] = useState([]);
   const [readMore, setReadmore] = useState(false);
   const [date, setDate] = useState(new Date());
   const [isButton1Pressed, setButton1Pressed] = useState(false);
   const [isButton2Pressed, setButton2Pressed] = useState(false);
+
+  const openModal = () => {
+    setModal(true);
+  };
+
+  const closeModal = () => {
+    setModal(false);
+  };
 
   const allCardElements = allCards.map((theCard, index) => {
     return (
@@ -93,13 +100,7 @@ const DayviewTimesheet = () => {
     });
   }
 
-  const openModal = () => {
-    setModal(true);
-  };
-
-  const closeModal = () => {
-    setModal(false);
-  };
+  
 
   const formattedDate = date.toLocaleDateString('en-US', {
     weekday: 'short',
@@ -133,6 +134,7 @@ const DayviewTimesheet = () => {
   const dayButtonClassName = `join-item btn my-3 ${isButton1Pressed ? 'btn-accent btn-active' : 'btn-success'}`;
   const weekButtonClassName = `join-item btn my-3 ${isButton2Pressed ? 'btn-accent btn-active' : 'btn-success'}`;
 
+
   return (
     <div className="h-screen w-screen bg-no-repeat bg-cover relative bg-blue-100/40">
       <Navbar />
@@ -155,22 +157,26 @@ const DayviewTimesheet = () => {
           </div>
           <button className="btn btn-success my-3">Sort by</button>        
         </div>
-        <DayChecked allCardElements={allCardElements} />
+        <DayChecked />
+        {/* Timesheet card */}
+        <div className='flex flex-col w-3/4 h-52 justify-center mx-auto my-auto'>
+          {allCardElements}
+        </div>
       </div>
       { modal && (
-        <section className="flex flex-col items-center backdrop-blur h-screen mt-[-8rem]">
+        <section className="flex flex-col items-center backdrop-blur h-screen mt-[-22rem]">
           <div className="flex flex-col justify-center gap-y-4 bg-yellow-100 mt-5 w-auto rounded-md">
             <div className="flex flex-row-reverse">
               <img 
                 src="https://img.icons8.com/?size=512&id=8112&format=png" 
                 alt="closemodal"
-                className="w-5 h-5 mt-2 mr-2"
+                className="w-5 h-5 mt-2 mr-2 cursor-pointer"
                 onClick={closeModal} 
               />
               <form onSubmit={onCardSubmit}>
                 {/* Customer box */}
                 <div className='flex flex-row my-3'>
-                  <label className="ml-8">Customer :</label>
+                  <label htmlFor="customer" className="ml-8">Customer :</label>
                   <select
                     className="ml-8"
                     value={customer}
@@ -184,7 +190,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Project box */}
                 <div className='flex flex-row my-3'>
-                  <label className="ml-8">Project :</label>
+                  <label htmlFor="project" className="ml-8">Project :</label>
                   <select
                     className="ml-[50px]"
                     value={project}
@@ -198,7 +204,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Role box */}
                 <div className='flex flex-row my-3'>
-                  <label className="ml-8">Role :</label>
+                  <label htmlFor="role" className="ml-8">Role :</label>
                   <select
                     className="ml-[70px]"
                     value={role}
@@ -212,7 +218,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Task box */}
                 <div className='flex flex-row my-3'>
-                  <label className="ml-8">Task :</label>
+                  <label htmlFor="task" className="ml-8">Task :</label>
                   <select 
                     className="ml-[70px]"
                     value={task}
@@ -226,7 +232,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Bill type box */}
                 <div className='flex flex-row my-3'>
-                  <label className="ml-8">Bill type :</label>
+                  <label htmlFor="billtype" className="ml-8">Bill type :</label>
                   <select 
                     className="ml-[44px]"
                     value={billtype}
