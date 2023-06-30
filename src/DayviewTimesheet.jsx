@@ -98,6 +98,7 @@ const DayviewTimesheet = () => {
       newCard.id = Date.now().toString();
       return [...prevAllCard, newCard];
     });
+    setModal(false);
   }
 
   
@@ -159,7 +160,7 @@ const DayviewTimesheet = () => {
         </div>
         <DayChecked />
         {/* Timesheet card */}
-        <div className='flex flex-col w-3/4 h-52 justify-center mx-auto my-auto'>
+        <div className='flex flex-col w-3/4 h-52 justify-center mx-auto my-10'>
           {allCardElements}
         </div>
       </div>
@@ -176,7 +177,7 @@ const DayviewTimesheet = () => {
               <form onSubmit={onCardSubmit}>
                 {/* Customer box */}
                 <div className='flex flex-row my-3'>
-                  <label htmlFor="customer" className="ml-8">Customer :</label>
+                  <label htmlFor="customer" className="ml-8 text-black">Customer :</label>
                   <select
                     className="ml-8"
                     value={customer}
@@ -190,7 +191,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Project box */}
                 <div className='flex flex-row my-3'>
-                  <label htmlFor="project" className="ml-8">Project :</label>
+                  <label htmlFor="project" className="ml-8 text-black">Project :</label>
                   <select
                     className="ml-[50px]"
                     value={project}
@@ -204,7 +205,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Role box */}
                 <div className='flex flex-row my-3'>
-                  <label htmlFor="role" className="ml-8">Role :</label>
+                  <label htmlFor="role" className="ml-8 text-black">Role :</label>
                   <select
                     className="ml-[70px]"
                     value={role}
@@ -218,7 +219,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Task box */}
                 <div className='flex flex-row my-3'>
-                  <label htmlFor="task" className="ml-8">Task :</label>
+                  <label htmlFor="task" className="ml-8 text-black">Task :</label>
                   <select 
                     className="ml-[70px]"
                     value={task}
@@ -232,7 +233,7 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Bill type box */}
                 <div className='flex flex-row my-3'>
-                  <label htmlFor="billtype" className="ml-8">Bill type :</label>
+                  <label htmlFor="billtype" className="ml-8 text-black">Bill type :</label>
                   <select 
                     className="ml-[44px]"
                     value={billtype}
@@ -247,18 +248,18 @@ const DayviewTimesheet = () => {
                 </div>
                 {/* Datepicker box */}
                 <div className="mx-8 flex flex-row justify-between">
-                  <h6 className=''>Date & time :</h6>
+                  <h6 className='text-black'>Date & time :</h6>
                   {/* Time box */}
                   <div className="flex flex-col">
                     {/* Time start */}
                     <div className="flex flex-row ml-3">
-                      <h4 className="">From</h4>
+                      <h4 className="text-black">From</h4>
                       <input type="date" className="ml-3" name="date" value={card.date} onChange={onCardValueChange}></input>
                       <input type="time" className="ml-3" name="timestart" value={card.timestart} onChange={onCardValueChange}></input>
                     </div>
                     {/* Time end */}
                     <div className="flex flex-row ml-3 mt-4">
-                      <h4 className="">To</h4>
+                      <h4 className="text-black">To</h4>
                       <input type="date" className="ml-8"></input>
                       <input type="time" className="ml-3" name="timeend" value={card.timeend} onChange={onCardValueChange}></input>
                     </div>
