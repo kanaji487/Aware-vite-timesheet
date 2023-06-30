@@ -33,7 +33,7 @@ const DayviewTimesheet = () => {
 
   const allCardElements = allCards.map((theCard, index) => {
     return (
-      <div key={index} className="my-2">
+      <div key={index} className="my-4">
         <section className='flex flex-col bg-yellow-100 mx-auto rounded-md h-auto w-[40rem]'>
           <div className="flex flex-row justify-between">
             <h6 className='text-black text-lg font-bold mx-3 mt-1'>{theCard.roleDropdownValue}</h6>
@@ -52,6 +52,7 @@ const DayviewTimesheet = () => {
                 src="https://img.icons8.com/?size=512&id=99971&format=png" 
                 alt="delete"
                 className="w-4 h-4 mx-2 cursor-pointer"
+                onClick={() => onCardDeleted(index)}
               />
               <img 
                 src="https://img.icons8.com/?size=512&id=60022&format=png" 
@@ -110,9 +111,7 @@ const DayviewTimesheet = () => {
     setModal(false);
   }
 
-  
-
-  const formattedDate = date.toLocaleDateString('en-US', {
+  const formattedDate = date.toLocaleDateString('en-EN', {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -144,6 +143,11 @@ const DayviewTimesheet = () => {
   const dayButtonClassName = `join-item btn my-3 ${isButton1Pressed ? 'btn-accent btn-active' : 'btn-success'}`;
   const weekButtonClassName = `join-item btn my-3 ${isButton2Pressed ? 'btn-accent btn-active' : 'btn-success'}`;
 
+  const onCardDeleted = (index) => {
+    const updatedCard = allCards.filter((card, i) => i !== index);
+    localStorage.setItem("cardData", JSON.stringify(updatedCard));
+    setAllCards(updatedCard);
+  }
 
   return (
     <div className="h-screen w-screen bg-no-repeat bg-cover relative bg-blue-100/40">
@@ -169,12 +173,10 @@ const DayviewTimesheet = () => {
         </div>
         <DayChecked />
         {/* Timesheet card */}
-        <div className='flex flex-col w-3/4 h-52 justify-center mx-auto my-10'>
-          {allCardElements}
-        </div>
+        {allCardElements}
       </div>
       { modal && (
-        <section className="flex flex-col items-center backdrop-blur h-screen mt-[-22rem]">
+        <section className="flex flex-col items-center backdrop-blur h-screen">
           <div className="flex flex-col justify-center gap-y-4 bg-yellow-100 mt-5 w-auto rounded-md">
             <div className="flex flex-row-reverse">
               <img 
